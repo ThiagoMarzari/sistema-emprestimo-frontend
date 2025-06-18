@@ -6,7 +6,9 @@ export default function Layout() {
   return (
     <>
       <Header />
-      <Outlet />
+      <div className="container mx-auto px-4">
+        <Outlet />
+      </div>
     </>
   )
 }

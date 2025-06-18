@@ -7,9 +7,10 @@ export default function RegisterItem() {
   const [showScanner, setShowScanner] = useState(false);
 
   return (
-    <form className="w-full container mx-auto flex items-center justify-center flex-col gap-4 p-4">
+    <form className="w-full container mx-auto flex items-center justify-center flex-col p-4">
 
-      <h1 className="font-bold text-2xl">Registrar item</h1>
+      <h1 className="font-bold text-4xl mb-1">Registrar item</h1>
+      <span className="text-gray-500 mb-6">Preencha os dados abaixo para cadastrar um novo item no sistema.</span>
 
       <div className="w-full max-w-lg flex flex-col gap-3">
         <label htmlFor="itemName" className="font-medium mb-1">Nome:</label>

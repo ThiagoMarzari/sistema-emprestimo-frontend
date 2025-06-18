@@ -3,9 +3,9 @@ import ufnLogo from "../assets/ufn_logo.png";
 
 export function Header() {
   return (
-    <header className="bg-white shadow-md py-4 px-2 sm:px-6 mb-6">
-      <div className="flex justify-between flex-col sm:flex-row items-center gap-2 sm:gap-6 pb-2">
-        <Link to="/" className="flex items-center gap-2 sm:gap-4">
+    <header className="bg-white shadow-md py-2 mb-4">
+      <div className="container mx-auto px-4 flex justify-between flex-col sm:flex-row items-center">
+        <Link to="/" className="flex items-center gap-2">
           <img
             src={ufnLogo}
             alt="UFN Logo"
