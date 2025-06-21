@@ -12,13 +12,13 @@ interface FormProps extends React.HTMLAttributes<HTMLFormElement> {
 export function Form({ title, description, children, ...props }: FormProps) {
   return (
     <form
-      className="h-full flex items-center justify-center mt-20"
+      className="h-full w-full flex items-center justify-center"
       {...props}
     >
-      <div className="flex flex-col items-center rounded-lg p-6 w-full max-w-3xl shadow-2xl bg-white">
+      <div className="flex flex-col items-center rounded-lg p-6 w-full border max-w-3xl shadow-md bg-white">
         <h1 className="font-bold text-center text-4xl mb-4">{title}</h1>
         <span
-          className="text-gray-500 mb-8 text-center">
+          className="text-gray-500 mb-6 text-center">
           {description}
         </span>
 

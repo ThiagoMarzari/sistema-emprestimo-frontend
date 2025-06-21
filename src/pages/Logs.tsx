@@ -19,6 +19,7 @@ import { Calendar } from "@/components/ui/calendar"
 import { Button } from "@/components/ui/button"
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
+import { BoxContainer } from "@/components/BoxContainer"
 
 type Movimentacao = {
   id: number
@@ -66,7 +67,7 @@ export default function Logs() {
   })
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-6">
+    <BoxContainer>
       <div className="flex flex-col sm:flex-row gap-6">
         {/* Filtro por data */}
         <div className="flex flex-col gap-2">
@@ -148,6 +149,6 @@ export default function Logs() {
           )}
         </TableBody>
       </Table>
-    </div>
+    </BoxContainer>
   )
 }

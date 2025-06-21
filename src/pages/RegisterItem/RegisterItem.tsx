@@ -5,23 +5,22 @@ import { LastestRecords } from "./_components/LastestRecords";
 import { Form } from "@/components/Form";
 import { InputLabel } from "@/components/InputLabel";
 import { ShowScannerButton } from "@/components/ShowScannerButton";
-import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
-import { Label } from "@radix-ui/react-label";
+import { BoxContainer } from "@/components/BoxContainer";
 
 export default function RegisterItem() {
-
-  const [itemName, setItemName] = useState("");
+  const [name, setName] = useState("");
   const [code, setCode] = useState("");
   const [showScanner, setShowScanner] = useState(false);
-  const [focusedInput, setFocusedInput] = useState<"itemName" | "code" | null>(null);
+  const [focusedInput, setFocusedInput] = useState<"name" | "code" | null>(null);
+  const [registerType, setRegisterType] = useState<"item" | "usuario">("item");
 
   function handleScanner(code: string) {
-    if (focusedInput === "itemName") {
-      setItemName(code);
+    if (focusedInput === "name") {
+      setName(code);
     } else if (focusedInput === "code") {
       setCode(code);
-    } else if (!itemName) {
-      setItemName(code);
+    } else if (!name) {
+      setName(code);
     } else if (!code) {
       setCode(code);
     }
@@ -30,20 +29,22 @@ export default function RegisterItem() {
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
-    console.log("Nome do item:", itemName);
+    console.log("Nome do item:", name);
     console.log("Código do item:", code);
-    if (!itemName || !code) {
+    if (!name || !code) {
       toast.error("Por favor, preencha todos os campos.")
       return;
     }
 
-    api.post("/itens", {
-      nome: itemName,
+    const endpoint = registerType === "item" ? "itens" : "usuarios";
+
+    api.post(`/${endpoint}`, {
+      nome: name,
       codigo: code,
     }).then((res) => {
       console.log("Item registrado:", res.data);
       toast.success('Item cadastrado!')
-      setItemName("")
+      setName("")
       setCode("")
       setShowScanner(false)
     }).catch((err) => {
@@ -55,35 +56,71 @@ export default function RegisterItem() {
 
   return (
     <div>
-      <div className="bg-red-500">
+
+      <BoxContainer>
+        <p className="mb-2 text-gray-600">Escolha o tipo de cadastro que deseja realizar:</p>
+
+        <div className="flex gap-4">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="radio"
+              name="registerType"
+              value="item"
+              checked={registerType === "item"}
+              onChange={() => setRegisterType("item")}
+              className="accent-blue-600 w-4 h-4"
+            />
+            <span className="text-gray-700 font-medium">Cadastrar Item</span>
+          </label>
+
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="radio"
+              name="registerType"
+              value="usuario"
+              checked={registerType === "usuario"}
+              onChange={() => setRegisterType("usuario")}
+              className="accent-blue-600 w-4 h-4"
+            />
+            <span className="text-gray-700 font-medium">Cadastrar Usuário</span>
+          </label>
+        </div>
+      </BoxContainer>
+
+      {/* FORM */}
+      <div className="w-full flex flex-col lg:flex-row items-start justify-center gap-4">
+
+        <Form
+          title={registerType === "item" ? "Cadastrar Item" : "Cadastrar Usuário"}
+          description={registerType === "item"
+            ? "Preencha os dados abaixo para cadastrar um novo item no sistema."
+            : "Preencha os dados abaixo para cadastrar um novo usuário no sistema."}
+          onSubmit={handleSubmit}
+
+        >
+          <InputLabel label={"Nome"} id="name" value={name} placeholder="Digite o nome" onChange={(e) => setName(e.target.value)} autoComplete="off" autoFocus
+            onFocus={() => setFocusedInput("name")}
+            onBlur={() => setFocusedInput(null)}
+          />
+          <InputLabel label={"Código"} id="itemCode" placeholder="Digite o código" value={code} onChange={(e) => setCode(e.target.value)} autoComplete="off"
+            onFocus={() => setFocusedInput("code")}
+            onBlur={() => setFocusedInput(null)}
+          />
+          <ShowScannerButton
+            code={handleScanner}
+            showScanner={showScanner}
+            onClick={() => setShowScanner(!showScanner)}
+          />
+
+        </Form>
+
+        <div className="w-full">
+          <LastestRecords type={registerType} />
+        </div>
 
       </div>
 
 
-
-      <Form
-        title={"Registrar"}
-        description={"Preencha os dados abaixo para cadastrar um novo item no sistema."}
-        onSubmit={handleSubmit}
-      >
-        <InputLabel label={"Nome do item"} id="itemName" value={itemName} placeholder="Digite o nome do item" onChange={(e) => setItemName(e.target.value)} autoComplete="off" autoFocus
-          onFocus={() => setFocusedInput("itemName")}
-          onBlur={() => setFocusedInput(null)}
-        />
-
-        <InputLabel label={"Código do item"} id="itemCode" placeholder="Digite o código do item" value={code} onChange={(e) => setCode(e.target.value)} autoComplete="off"
-          onFocus={() => setFocusedInput("code")}
-          onBlur={() => setFocusedInput(null)}
-        />
-
-        <ShowScannerButton
-          code={handleScanner}
-          showScanner={showScanner}
-          onClick={() => setShowScanner(!showScanner)}
-        />
-      </Form>
-
-      <LastestRecords />
     </div >
   )
 }

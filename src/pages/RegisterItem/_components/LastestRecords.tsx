@@ -1,25 +1,31 @@
+import { BoxContainer } from "@/components/BoxContainer";
 import { Button } from "@/components/ui/button";
 import { api } from "@/services/api";
 import { useEffect, useState } from "react";
 
-interface ItemProps {
+interface RegisterProps {
   id: number;
   nome: string;
   codigo: string;
 }
 
-export function LastestRecords() {
+interface LastestRecordsProps {
+  type: string;
+}
 
-  const [records, setRecords] = useState<ItemProps[]>();
+export function LastestRecords({ type }: LastestRecordsProps) {
+
+  const [records, setRecords] = useState<RegisterProps[]>();
 
   async function ultimosRegistros() {
-    const response = await api.get("/itens");
-    setRecords(response.data.reverse());
+    const endpoint = type === "item" ? "itens" : "usuarios";
+    const response = await api.get(`${endpoint}`);
+    setRecords(response.data);
   }
 
   useEffect(() => {
     ultimosRegistros();
-  }, [])
+  }, [type])
 
   async function handleDelete(id: number) {
     try {
@@ -31,11 +37,11 @@ export function LastestRecords() {
   }
 
   return (
-    <section className="py-2">
-      <div className="w-full max-w-3xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
+    <section>
+      <BoxContainer>
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-xl">Últimos registros feitos</h2>
-          <Button onClick={ultimosRegistros} className="mt-4">
+          <Button onClick={ultimosRegistros}>
             Ver últimos registros
           </Button>
         </div>
@@ -53,7 +59,7 @@ export function LastestRecords() {
             </div>
           ))}
         </div>
-      </div>
+      </BoxContainer>
 
     </section >
   )
