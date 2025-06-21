@@ -33,7 +33,7 @@ export function BarcodeScanner({ onDetected }: Props) {
     Quagga.onDetected((result: QuaggaResult) => {
       const code = result.codeResult.code;
       onDetected(code);
-      // Quagga.stop(); // Parar após leitura
+      Quagga.stop(); // Parar após leitura
     });
 
     return () => {
