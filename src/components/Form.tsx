@@ -15,7 +15,7 @@ export function Form({ title, description, children, ...props }: FormProps) {
       className="h-full flex items-center justify-center mt-20"
       {...props}
     >
-      <div className="flex flex-col rounded-lg p-6 w-full max-w-lg shadow-2xl bg-white">
+      <div className="flex flex-col items-center rounded-lg p-6 w-full max-w-3xl shadow-2xl bg-white">
         <h1 className="font-bold text-center text-4xl mb-4">{title}</h1>
         <span
           className="text-gray-500 mb-8 text-center">
@@ -23,12 +23,12 @@ export function Form({ title, description, children, ...props }: FormProps) {
         </span>
 
         {/* INPUT SECTION */}
-        <div className="w-full max-w-lg flex flex-col gap-3 mb-4">
+        <div className="w-full flex flex-col gap-3 mb-4">
           {children}
         </div>
 
         {/* Ao clicar vai fazer uma req para o backend */}
-        <Button type="submit" className="flex items-center gap-2">
+        <Button type="submit" className="w-full flex items-center gap-2">
           Cadastrar
         </Button>
       </div>
