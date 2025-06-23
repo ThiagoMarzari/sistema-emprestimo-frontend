@@ -13,7 +13,7 @@ export function ShowScannerButton({ code, showScanner, onClick }: Props) {
       <Button
         type="button"
         onClick={onClick}
-        className="w-full"
+        className="w-full hidden"
       >
         {showScanner ? "Fechar Scanner" : "Abrir Scanner"}
       </Button>
