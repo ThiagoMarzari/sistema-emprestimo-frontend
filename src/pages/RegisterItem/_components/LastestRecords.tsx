@@ -10,15 +10,15 @@ interface RegisterProps {
 }
 
 interface LatestRecordsProps {
-  type: string;
+  registerType: "item" | "usuario";
 }
 
-export function LatestRecords({ type }: LatestRecordsProps) {
+export function LatestRecords({ registerType }: LatestRecordsProps) {
 
   const [records, setRecords] = useState<RegisterProps[]>([]);
 
   async function ultimosRegistros() {
-    const endpoint = type === "item" ? "itens" : "usuarios";
+    const endpoint = registerType === "item" ? "itens" : "usuarios";
     const response = await api.get(`${endpoint}`);
     setRecords(response.data);
     console.log(response.data);
@@ -26,7 +26,7 @@ export function LatestRecords({ type }: LatestRecordsProps) {
 
   useEffect(() => {
     ultimosRegistros();
-  }, [type])
+  }, [registerType])
 
   async function handleDelete(id: number) {
     try {

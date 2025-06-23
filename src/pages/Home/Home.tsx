@@ -1,11 +1,4 @@
-import { BoxContainer } from "@/components/BoxContainer";
-import { Form } from "@/components/Form";
-import { InputLabel } from "@/components/InputLabel";
-import { ShowScannerButton } from "@/components/ShowScannerButton";
-import { Button } from "@/components/ui/button";
-import { api } from "@/services/api";
-import { useState, type FormEvent } from "react";
-import toast from "react-hot-toast";
+
 import {
   Tabs,
   TabsContent,
@@ -16,17 +9,11 @@ import { LoanForm } from "./_components/LoanForm";
 import { ReturnForm } from "./_components/ReturnForm";
 
 export default function Home() {
-
-  const [itemCode, setItemCode] = useState("");
-  const [userCode, setUserCode] = useState("");
-  const [showScanner, setShowScanner] = useState(false);
-  const [focusedInput, setFocusedInput] = useState<"itemCode" | "userCode" | null>(null);
-  const [selected, setSelected] = useState<"emprestimo" | "devolucao" | null>("emprestimo");
   return (
-    <div>
-
+    <div className="flex mx-auto w-full max-w-3xl flex-col gap-6">
+      
       <Tabs defaultValue="emprestimo">
-        <TabsList className="max-w-3xl w-full mx-auto ">
+        <TabsList>
           <TabsTrigger value="emprestimo">
             Emprestar
           </TabsTrigger>
@@ -35,16 +22,12 @@ export default function Home() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="emprestimo">
-
           <LoanForm />
-          
         </TabsContent>
         <TabsContent value="devolucao">
          <ReturnForm />
         </TabsContent>
       </Tabs>
-
-
 
       {/* Acoes */}
 
