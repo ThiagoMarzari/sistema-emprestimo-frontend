@@ -9,18 +9,19 @@ interface RegisterProps {
   codigo: string;
 }
 
-interface LastestRecordsProps {
+interface LatestRecordsProps {
   type: string;
 }
 
-export function LastestRecords({ type }: LastestRecordsProps) {
+export function LatestRecords({ type }: LatestRecordsProps) {
 
-  const [records, setRecords] = useState<RegisterProps[]>();
+  const [records, setRecords] = useState<RegisterProps[]>([]);
 
   async function ultimosRegistros() {
     const endpoint = type === "item" ? "itens" : "usuarios";
     const response = await api.get(`${endpoint}`);
     setRecords(response.data);
+    console.log(response.data);
   }
 
   useEffect(() => {

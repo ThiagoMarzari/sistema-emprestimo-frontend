@@ -19,11 +19,9 @@ export function Header() {
           </div>
         </Link>
 
-
-
         <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
           <Link to="/" className="text-slate-700 hover:text-slate-900 transition-colors">
-            Início
+            Emprestar/Devolver
           </Link>
           <Link to="/logs" className="text-slate-700 hover:text-slate-900 transition-colors">
             Logs
