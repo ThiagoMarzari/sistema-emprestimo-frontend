@@ -1,5 +1,4 @@
 import type React from "react";
-import { Button } from "./ui/button";
 import type { ReactNode } from "react";
 
 interface FormProps extends React.HTMLAttributes<HTMLFormElement> {
@@ -27,10 +26,6 @@ export function Form({ title, description, children, ...props }: FormProps) {
           {children}
         </div>
 
-        {/* Ao clicar vai fazer uma req para o backend */}
-        <Button type="submit" className="w-full flex items-center gap-2">
-          Cadastrar
-        </Button>
       </div>
     </form>
   )

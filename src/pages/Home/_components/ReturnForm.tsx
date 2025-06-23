@@ -4,6 +4,7 @@ import { api } from "@/services/api";
 import { Form } from "@/components/Form";
 import { InputLabel } from "@/components/InputLabel";
 import { ShowScannerButton } from "@/components/ShowScannerButton";
+import { Button } from "@/components/ui/button";
 
 export function ReturnForm() {
   const [itemCode, setItemCode] = useState("");
@@ -58,6 +59,9 @@ export function ReturnForm() {
         autoComplete="off"
         autoFocus
       />
+      <Button type="submit" className="w-full">
+        Devolver Item
+      </Button>
       <ShowScannerButton code={handleScanner} showScanner={showScanner} onClick={() => setShowScanner(!showScanner)} />
     </Form>
   );

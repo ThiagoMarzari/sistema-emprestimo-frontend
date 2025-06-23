@@ -4,6 +4,7 @@ import { api } from "@/services/api";
 import { Form } from "@/components/Form";
 import { InputLabel } from "@/components/InputLabel";
 import { ShowScannerButton } from "@/components/ShowScannerButton";
+import { Button } from "@/components/ui/button";
 
 export function LoanForm() {
   const [itemCode, setItemCode] = useState("");
@@ -69,6 +70,9 @@ export function LoanForm() {
         onBlur={() => setFocusedInput(null)}
         autoComplete="off"
       />
+      <Button>
+        Registrar Empréstimo
+      </Button>
       <ShowScannerButton code={handleScanner} showScanner={showScanner} onClick={() => setShowScanner(!showScanner)} />
     </Form>
   );

@@ -3,6 +3,8 @@ import toast from "react-hot-toast";
 import { ShowScannerButton } from "@/components/ShowScannerButton";
 import { Form } from "@/components/Form";
 import { InputLabel } from "@/components/InputLabel";
+import { api } from "@/services/api";
+import { Button } from "@/components/ui/button";
 
 interface RegisterItemProps {
   registerType: "item" | "usuario";
@@ -34,6 +36,10 @@ export function RegisterForm({ registerType }: RegisterItemProps) {
       return;
     }
     // Aqui você pode adicionar a lógica de envio para a API
+    api.post(registerType === "item" ? "itens" : "usuarios", {
+      nome: name,
+      codigo: code,
+    })
     toast.success("Cadastro realizado com sucesso!");
     setName("");
     setCode("");
@@ -74,6 +80,9 @@ export function RegisterForm({ registerType }: RegisterItemProps) {
         showScanner={showScanner}
         onClick={() => setShowScanner(!showScanner)}
       />
+      <Button type="submit">
+        {registerType === "item" ? "Cadastrar Item" : "Cadastrar Usuário"}
+      </Button>
     </Form>
   );
 }

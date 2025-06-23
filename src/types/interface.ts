@@ -1,8 +1,8 @@
 export interface ItemProps {
   nome: string;
   codigo: string;
-  usuarioAtual: string;
-  codigoUsuario: string;
+  usuarioNome: string;
+  usuarioCodigo: string;
 }
 
 export interface LogProps {
