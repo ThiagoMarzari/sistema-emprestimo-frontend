@@ -1,4 +1,4 @@
-import { LatestRecords } from "./_components/LastestRecords";
+import { LatestRecords } from "./_components/LatestRecords";
 import {
   Tabs,
   TabsContent,

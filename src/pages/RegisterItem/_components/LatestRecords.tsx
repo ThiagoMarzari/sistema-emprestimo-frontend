@@ -4,7 +4,6 @@ import { api } from "@/services/api";
 import { useEffect, useState } from "react";
 
 interface RegisterProps {
-  id: number;
   nome: string;
   codigo: string;
 }
@@ -28,12 +27,13 @@ export function LatestRecords({ registerType }: LatestRecordsProps) {
     ultimosRegistros();
   }, [registerType])
 
-  async function handleDelete(id: number) {
+  async function handleUpdateItem(cod: string) {
     try {
-      await api.delete(`/itens/${id}`);
-      setRecords(records?.filter((i) => i.id !== id));
+      console.log(cod)
+      await api.put(`/itens/mudarStatus/${cod}`);
+      setRecords(records?.filter((i) => i.codigo !== cod));
     } catch (error) {
-      console.error("Erro ao deletar item:", error);
+      console.error("Erro ao desabilitar item:", error);
     }
   }
 
@@ -54,8 +54,8 @@ export function LatestRecords({ registerType }: LatestRecordsProps) {
                 <p className="font-semibold">{item.nome}</p>
                 <p className="text-gray-600">Código: {item.codigo}</p>
               </div>
-              <Button variant={"destructive"} onClick={() => handleDelete(item.id)}>
-                Deletar
+              <Button variant={"destructive"} onClick={() => handleUpdateItem(item.codigo)}>
+                Desabilitar
               </Button>
             </div>
           ))}
