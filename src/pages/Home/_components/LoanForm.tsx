@@ -11,6 +11,7 @@ export function LoanForm() {
   const [userCode, setUserCode] = useState("");
   const [focusedInput, setFocusedInput] = useState<"itemCode" | "userCode" | null>(null);
   const [showScanner, setShowScanner] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   function handleScanner(code: string) {
     if (focusedInput === "itemCode") {
@@ -24,29 +25,38 @@ export function LoanForm() {
     }
   }
 
-  function handleSubmit(event: FormEvent) {
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
-    api.post("itens/emprestar", {
-      itemCodigo: itemCode,
-      usuarioCodigo: userCode,
-    })
-      .then(response => {
-        console.log("Movimentação registrada:", response.data);
-        toast.success('Movimentação registrada com sucesso!');
-        setItemCode("");
-        setUserCode("");
-      })
-      .catch(error => {
-        console.error("Erro ao registrar movimentação:", error);
-        toast.error('Erro ao registrar movimentação. Tente novamente.');
+    if (!itemCode.trim() || !userCode.trim()) {
+      toast.error("Por favor, preencha todos os campos.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await api.post("itens/emprestar", {
+        itemCodigo: itemCode.trim(),
+        usuarioCodigo: userCode.trim(),
       });
+      
+      console.log("Movimentação registrada:", response.data);
+      toast.success('Empréstimo registrado com sucesso!');
+      setItemCode("");
+      setUserCode("");
+      setShowScanner(false);
+    } catch (error) {
+      console.error("Erro ao registrar movimentação:", error);
+      toast.error('Erro ao registrar empréstimo. Tente novamente.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
     <Form
       title="Emprestar"
-      description="Gerencie o empréstimo e devolução de itens preenchendo os campos abaixo."
+      description="Gerencie o empréstimo de itens preenchendo os campos abaixo."
       onSubmit={handleSubmit}
     >
       <InputLabel
@@ -59,6 +69,7 @@ export function LoanForm() {
         onBlur={() => setFocusedInput(null)}
         autoComplete="off"
         autoFocus
+        disabled={loading}
       />
       <InputLabel
         label="Código do usuário"
@@ -69,11 +80,20 @@ export function LoanForm() {
         onFocus={() => setFocusedInput("userCode")}
         onBlur={() => setFocusedInput(null)}
         autoComplete="off"
+        disabled={loading}
       />
-      <Button>
-        Registrar Empréstimo
+      <Button 
+        type="submit" 
+        disabled={loading || !itemCode.trim() || !userCode.trim()}
+        className="w-full"
+      >
+        {loading ? "Registrando..." : "Registrar Empréstimo"}
       </Button>
-      <ShowScannerButton code={handleScanner} showScanner={showScanner} onClick={() => setShowScanner(!showScanner)} />
+      <ShowScannerButton 
+        code={handleScanner} 
+        showScanner={showScanner} 
+        onClick={() => setShowScanner(!showScanner)} 
+      />
     </Form>
   );
 }

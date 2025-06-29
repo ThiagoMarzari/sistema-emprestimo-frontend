@@ -15,6 +15,7 @@ export function RegisterForm({ registerType }: RegisterItemProps) {
   const [code, setCode] = useState("");
   const [showScanner, setShowScanner] = useState(false);
   const [focusedInput, setFocusedInput] = useState<"name" | "code" | null>(null);
+  const [loading, setLoading] = useState(false);
 
   function handleScanner(code: string) {
     if (focusedInput === "name") {
@@ -28,22 +29,31 @@ export function RegisterForm({ registerType }: RegisterItemProps) {
     }
   }
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
-    if (!name || !code) {
+    if (!name.trim() || !code.trim()) {
       toast.error("Por favor, preencha todos os campos.");
       return;
     }
-    // Aqui você pode adicionar a lógica de envio para a API
-    api.post(registerType === "item" ? "itens" : "usuarios", {
-      nome: name,
-      codigo: code,
-    })
-    toast.success("Cadastro realizado com sucesso!");
-    setName("");
-    setCode("");
-    setShowScanner(false);
+
+    setLoading(true);
+    try {
+      await api.post(registerType === "item" ? "itens" : "usuarios", {
+        nome: name.trim(),
+        codigo: code.trim(),
+      });
+      
+      toast.success("Cadastro realizado com sucesso!");
+      setName("");
+      setCode("");
+      setShowScanner(false);
+    } catch (error) {
+      console.error("Erro ao cadastrar:", error);
+      toast.error("Erro ao realizar cadastro. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -64,6 +74,7 @@ export function RegisterForm({ registerType }: RegisterItemProps) {
         autoFocus
         onFocus={() => setFocusedInput("name")}
         onBlur={() => setFocusedInput(null)}
+        disabled={loading}
       />
       <InputLabel
         label={registerType === "item" ? "Código do item" : "Código do usuário"}
@@ -74,14 +85,19 @@ export function RegisterForm({ registerType }: RegisterItemProps) {
         autoComplete="off"
         onFocus={() => setFocusedInput("code")}
         onBlur={() => setFocusedInput(null)}
+        disabled={loading}
       />
       <ShowScannerButton
         code={handleScanner}
         showScanner={showScanner}
         onClick={() => setShowScanner(!showScanner)}
       />
-      <Button type="submit">
-        {registerType === "item" ? "Cadastrar Item" : "Cadastrar Usuário"}
+      <Button 
+        type="submit" 
+        disabled={loading || !name.trim() || !code.trim()}
+        className="w-full"
+      >
+        {loading ? "Cadastrando..." : (registerType === "item" ? "Cadastrar Item" : "Cadastrar Usuário")}
       </Button>
     </Form>
   );

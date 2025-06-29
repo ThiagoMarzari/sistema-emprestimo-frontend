@@ -11,6 +11,7 @@ export function ReturnForm() {
   const [userCode, setUserCode] = useState("");
   const [focusedInput, setFocusedInput] = useState<"itemCode" | "userCode" | null>(null);
   const [showScanner, setShowScanner] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   function handleScanner(code: string) {
     if (focusedInput === "itemCode") {
@@ -24,28 +25,37 @@ export function ReturnForm() {
     }
   }
 
-  function handleSubmit(event: FormEvent) {
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
-    api.post("itens/devolver", {
-      itemCodigo: itemCode
-    })
-      .then(response => {
-        console.log("Movimentação registrada:", response.data);
-        toast.success('Movimentação registrada com sucesso!');
-        setItemCode("");
-        setUserCode("");
-      })
-      .catch(error => {
-        console.error("Erro ao registrar movimentação:", error);
-        toast.error('Erro ao registrar movimentação. Tente novamente.');
+    if (!itemCode.trim()) {
+      toast.error("Por favor, preencha o código do item.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await api.post("itens/devolver", {
+        itemCodigo: itemCode.trim()
       });
+      
+      console.log("Movimentação registrada:", response.data);
+      toast.success('Devolução registrada com sucesso!');
+      setItemCode("");
+      setUserCode("");
+      setShowScanner(false);
+    } catch (error) {
+      console.error("Erro ao registrar movimentação:", error);
+      toast.error('Erro ao registrar devolução. Tente novamente.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
     <Form
       title="Devolver"
-      description="Gerencie o empréstimo e devolução de itens preenchendo os campos abaixo."
+      description="Registre a devolução de itens preenchendo o código do item abaixo."
       onSubmit={handleSubmit}
     >
       <InputLabel
@@ -58,11 +68,20 @@ export function ReturnForm() {
         onBlur={() => setFocusedInput(null)}
         autoComplete="off"
         autoFocus
+        disabled={loading}
       />
-      <Button type="submit" className="w-full">
-        Devolver Item
+      <Button 
+        type="submit" 
+        disabled={loading || !itemCode.trim()}
+        className="w-full"
+      >
+        {loading ? "Registrando..." : "Devolver Item"}
       </Button>
-      <ShowScannerButton code={handleScanner} showScanner={showScanner} onClick={() => setShowScanner(!showScanner)} />
+      <ShowScannerButton 
+        code={handleScanner} 
+        showScanner={showScanner} 
+        onClick={() => setShowScanner(!showScanner)} 
+      />
     </Form>
   );
 }
