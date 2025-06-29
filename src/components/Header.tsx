@@ -38,7 +38,7 @@ export function Header() {
               to="/" 
               className="text-gray-700 hover:text-[#003D7C] font-medium transition-colors duration-200 relative group"
             >
-              Empréstimo
+              Home
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#003D7C] transition-all duration-200 group-hover:w-full"></span>
             </Link>
             <Link 
@@ -52,7 +52,7 @@ export function Header() {
               to="/registerItem" 
               className="text-gray-700 hover:text-[#003D7C] font-medium transition-colors duration-200 relative group"
             >
-              Registrar
+              Cadastrar
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#003D7C] transition-all duration-200 group-hover:w-full"></span>
             </Link>
           </nav>
@@ -79,7 +79,7 @@ export function Header() {
               className="block text-gray-700 hover:text-[#003D7C] font-medium transition-colors duration-200 py-2 px-3 rounded-lg hover:bg-gray-50"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Empréstimo
+              Home
             </Link>
             <Link 
               to="/logs" 
@@ -93,7 +93,7 @@ export function Header() {
               className="block text-gray-700 hover:text-[#003D7C] font-medium transition-colors duration-200 py-2 px-3 rounded-lg hover:bg-gray-50"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Registrar
+              Cadastrar
             </Link>
           </nav>
         </div>

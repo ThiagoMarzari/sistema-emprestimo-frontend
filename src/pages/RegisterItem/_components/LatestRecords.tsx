@@ -1,5 +1,6 @@
 import { BoxContainer } from "@/components/BoxContainer";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { api } from "@/services/api";
 import { useEffect, useState } from "react";
 import { RefreshCw, AlertCircle, CheckCircle, XCircle } from "lucide-react";
@@ -7,6 +8,8 @@ import { RefreshCw, AlertCircle, CheckCircle, XCircle } from "lucide-react";
 interface RegisterProps {
   nome: string;
   codigo: string;
+  disponivel: boolean;
+  habilitado: boolean;
 }
 
 interface LatestRecordsProps {
@@ -42,10 +45,14 @@ export function LatestRecords({ registerType }: LatestRecordsProps) {
     setDisablingItem(cod);
     try {
       await api.put(`/itens/mudarStatus/${cod}`);
-      setRecords(records?.filter((i) => i.codigo !== cod));
+      setRecords(records.map(item => 
+        item.codigo === cod 
+          ? { ...item, habilitado: !item.habilitado }
+          : item
+      ));
     } catch (error) {
-      console.error("Erro ao desabilitar item:", error);
-      setError("Erro ao desabilitar item. Tente novamente.");
+      console.error("Erro ao alterar status do item:", error);
+      setError("Erro ao alterar status do item. Tente novamente.");
     } finally {
       setDisablingItem(null);
     }
@@ -68,7 +75,7 @@ export function LatestRecords({ registerType }: LatestRecordsProps) {
           <Button 
             onClick={ultimosRegistros} 
             disabled={loading}
-            className="flex items-center justify-center gap-2 hover:bg-blue-600 transition-colors min-w-[120px]"
+            className="flex items-center justify-center gap-2 transition-colors min-w-[120px]"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             {loading ? "Carregando..." : "Atualizar"}
@@ -120,33 +127,67 @@ export function LatestRecords({ registerType }: LatestRecordsProps) {
                       </div>
                       <div>
                         <p className="font-semibold text-gray-900">{item.nome}</p>
-                        <p className="text-gray-500 text-sm">
-                          Código: <span className="font-mono bg-gray-100 px-2 py-1 rounded text-xs">{item.codigo}</span>
-                        </p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="text-gray-500 text-sm">
+                            Código: <span className="font-mono bg-gray-100 px-2 py-1 rounded text-xs">{item.codigo}</span>
+                          </span>
+                          {registerType === "item" && (
+                            <>
+                              <Badge 
+                                variant={item.habilitado ? "default" : "secondary"}
+                                className={`text-xs ${
+                                  item.habilitado ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                                }`}
+                              >
+                                {item.habilitado ? 'Habilitado' : 'Desabilitado'}
+                              </Badge>
+                              <Badge 
+                                variant={item.disponivel ? "default" : "secondary"}
+                                className={`text-xs ${
+                                  item.disponivel ? 'bg-blue-100 text-blue-700' : 'bg-orange-100 text-orange-700'
+                                }`}
+                              >
+                                {item.disponivel ? 'Disponível' : 'Emprestado'}
+                              </Badge>
+                            </>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Button 
-                      variant="destructive" 
-                      size="sm"
-                      onClick={() => handleUpdateItem(item.codigo)}
-                      disabled={disablingItem === item.codigo}
-                      className="flex items-center justify-center gap-2 hover:bg-red-600 transition-colors min-w-[120px]"
-                    >
-                      {disablingItem === item.codigo ? (
-                        <>
-                          <RefreshCw className="w-3 h-3 animate-spin" />
-                          Desabilitando...
-                        </>
-                      ) : (
-                        <>
-                          <XCircle className="w-3 h-3" />
-                          Desabilitar
-                        </>
-                      )}
-                    </Button>
-                  </div>
+                  {registerType === "item" && (
+                    <div className="flex items-center gap-2">
+                      <Button 
+                        variant={item.habilitado ? "destructive" : "default"}
+                        size="sm"
+                        onClick={() => handleUpdateItem(item.codigo)}
+                        disabled={disablingItem === item.codigo}
+                        className={`flex items-center justify-center gap-2 min-w-[120px]`}
+                        
+                      >
+                        {disablingItem === item.codigo ? (
+                          <>
+                            <RefreshCw className="w-3 h-3 animate-spin" />
+                            Alterando...
+                          </>
+                        ) : (
+                          <>
+                            {item.habilitado ? (
+                              <>
+                                <XCircle className="w-3 h-3" />
+                                Desabilitar
+                              </>
+                            ) : (
+                              <>
+                                <CheckCircle className="w-3 h-3" />
+                                Habilitar
+                              </>
+                            )}
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
             ))

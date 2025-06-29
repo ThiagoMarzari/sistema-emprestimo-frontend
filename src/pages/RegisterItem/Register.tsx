@@ -1,4 +1,5 @@
 import { LatestRecords } from "./_components/LatestRecords";
+import { ItemsManager } from "./_components/ItemsManager";
 import {
   Tabs,
   TabsContent,
@@ -13,9 +14,10 @@ export default function Register() {
     <div className="flex mx-auto w-full flex-col gap-6">
 
       <Tabs defaultValue="item">
-        <TabsList>
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="item">Cadastrar Item</TabsTrigger>
           <TabsTrigger value="usuario">Cadastrar Usuário</TabsTrigger>
+          <TabsTrigger value="gerenciar">Gerenciar Itens</TabsTrigger>
         </TabsList>
         <TabsContent value="item">
           <div className="w-full flex flex-col lg:flex-row items-start justify-center gap-4">
@@ -34,6 +36,9 @@ export default function Register() {
             </div>
           </div>
 
+        </TabsContent>
+        <TabsContent value="gerenciar">
+          <ItemsManager />
         </TabsContent>
       </Tabs>
 
