@@ -78,7 +78,7 @@ export function ItemsManager() {
           <Button 
             onClick={fetchItems} 
             disabled={loading}
-            className="flex items-center gap-2 hover:bg-blue-600 transition-colors"
+            className="flex items-center gap-2 transition-colors"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             {loading ? "Carregando..." : "Atualizar"}
